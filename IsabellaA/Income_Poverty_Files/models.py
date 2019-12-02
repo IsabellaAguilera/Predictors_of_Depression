@@ -1,6 +1,6 @@
 from .app import db
 
-class Income_poverty(db.Model):
+class Incomepoverty(db.Model):
     __tablename__ = 'state_income_poverty'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -15,4 +15,4 @@ class Income_poverty(db.Model):
 
 
     def __repr__(self):
-        return '<Income_poverty %r>' % (self.name)
+        return '<Incomepoverty %r>' % (self.name)
