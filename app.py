@@ -23,14 +23,21 @@ engine = create_engine('sqlite:///project2.sqlite')
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    return render_template('results.html')
 
+@app.route('/geojson_alcohol')
+def geojson_alcohol():
+    file = "us_states_geojson_alcohol_final.geojson"
+    contents = open(file,'r').read()
+    return contents
 
-@app.route('/alcohol')
-def alcohol():
-    return render_template("alcohol.html")
+@app.route('/geojson_depression')
+def geojson_depression():
+    file = "us_states_geojson_depression_final.geojson"
+    contents = open(file,'r').read()
+    return contents
 
-@app.route("/api_alcohol")
+@app.route("/api_Alcohol")
 def alcohol_data():
     #engine = create_engine('sqlite:///project2.sqlite')
     alcohol_df = pd.read_sql_query("SELECT * FROM alcohol", con = engine)
