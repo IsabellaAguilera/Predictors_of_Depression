@@ -25,21 +25,21 @@ engine2 = create_engine('sqlite:///state_poverty.sqlite')
 def index():
     return render_template("index.html")
 
-@app.route('/income')
+@app.route('/Income')
 def income():
     return render_template("income.html")
 
-@app.route('/poverty')
+@app.route('/Poverty')
 def poverty():
     return render_template("poverty.html")
 
-@app.route("/api_income")
+@app.route("/api_Income")
 def income_data():
     income_df = pd.read_sql_query("SELECT * FROM state_income", con = engine1)
     income_json = income_df.to_json(orient = 'records')
     return income_json
 
-@app.route("/api_poverty")
+@app.route("/api_Poverty")
 def poverty_data():
     poverty_df = pd.read_sql_query("SELECT * FROM state poverty", con = engine2)
     poverty_json = poverty_df.to_json(orient = 'records')
