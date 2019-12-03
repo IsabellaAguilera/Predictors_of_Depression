@@ -48,8 +48,10 @@ function buildFactorPlot(source){
   d3.json(factor_url).then(function(response) {
     var data = response;
 
-    //var layout = {title : "Alcohol Plot"};
-    //var layout2 = {title: "Alcohol Bar Chart"};
+    var title = data[0]["Type"];
+
+    var layout = {title : `${title} Plot`};
+    var layout2 = {title: `${title} Bar Chart`};
 
     var depression_rate = data.map(function(record) {
       return record['yes_percent'];
@@ -74,22 +76,22 @@ function buildFactorPlot(source){
     var trace2 = {
       x: states,
       y: factor_rate,
-      //name: "alcohol by state",
+      name: `${title} by state`,
       type: "bar"
     };
 
     var trace3 = {
       x: states,
       y: depression_rate,
-      //name: "depression by state",
+      name: "depression by state",
       type: "bar"
     };
 
     var data2 = [trace1];
     var data3 = [trace2, trace3];
 
-    Plotly.plot("plot4", data2);
-    Plotly.plot("plot3", data3);
+    Plotly.plot("plot4", data2, layout);
+    Plotly.plot("plot3", data3, layout2);
   });
 }
 

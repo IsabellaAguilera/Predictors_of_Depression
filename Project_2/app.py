@@ -59,6 +59,11 @@ def geojson_depression():
 def alcohol_data():
     #engine = create_engine('sqlite:///project2.sqlite')
     alcohol_df = pd.read_sql_query("SELECT * FROM alcohol", con = engine)
+    type_list = []
+    for x in range(50):
+        type_list.append('Alcohol')
+    type_df = pd.DataFrame(type_list, columns = ['Type'])
+    alcohol_df = alcohol_df.merge(type_df, left_index=True, right_index=True)
     alcohol_json = alcohol_df.to_json(orient = 'records')
     return alcohol_json
 
@@ -67,6 +72,11 @@ def alcohol_data():
 def income_data():
     #engine = create_engine('sqlite:///project2.sqlite')
     income_df = pd.read_sql_query("SELECT * FROM income", con = engine)
+    type_list = []
+    for x in range(50):
+        type_list.append('Income')
+    type_df = pd.DataFrame(type_list, columns = ['Type'])
+    income_df = income_df.merge(type_df, left_index=True, right_index=True)
     income_json = income_df.to_json(orient = 'records')
     return income_json
 
@@ -74,6 +84,11 @@ def income_data():
 def poverty_data():
     #engine = create_engine('sqlite:///project2.sqlite')
     poverty_df = pd.read_sql_query("SELECT * FROM poverty", con = engine)
+    type_list = []
+    for x in range(50):
+        type_list.append('Poverty')
+    type_df = pd.DataFrame(type_list, columns = ['Type'])
+    poverty_df = poverty_df.merge(type_df, left_index=True, right_index=True)
     poverty_json = poverty_df.to_json(orient = 'records')
     return poverty_json
 
@@ -81,6 +96,11 @@ def poverty_data():
 def obesity_data():
     #engine = create_engine('sqlite:///project2.sqlite')
     obesity_df = pd.read_sql_query("SELECT * FROM obesity", con = engine)
+    type_list = []
+    for x in range(50):
+        type_list.append('Obesity')
+    type_df = pd.DataFrame(type_list, columns = ['Type'])
+    obesity_df = obesity_df.merge(type_df, left_index=True, right_index=True)
     obesity_json = obesity_df.to_json(orient = 'records')
     return obesity_json
 
@@ -88,6 +108,11 @@ def obesity_data():
 def depression_data():
     #engine = create_engine('sqlite:///project2.sqlite', convert_unicode=True)
     depression_df = pd.read_sql_query("SELECT * FROM depression", con = engine)
+    type_list = []
+    for x in range(50):
+        type_list.append('Depression')
+    type_df = pd.DataFrame(type_list, columns = ['Type'])
+    depression_df = depression_df.merge(type_df, left_index=True, right_index=True)
     depression_json = depression_df.to_json(orient = 'records')
     return depression_json
 
