@@ -11,6 +11,9 @@
       <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.3/dist/leaflet.css"
       integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ=="
       crossorigin=""/>
+      <link href="http://vjs.zencdn.net/5.0.2/video-js.css" rel="stylesheet">
+      <script src="http://vjs.zencdn.net/ie8/1.1.0/videojs-ie8.min.js"></script>
+      <script src="http://vjs.zencdn.net/5.0.2/video.js"></script>
   </head>
 
   <body>
@@ -20,9 +23,10 @@
 
       <div class="collapse navbar-collapse" id="navbarTogglerDemo02">
         <div id="story-buttons" class="btn-group" role="group" aria-label="questions to be answered">
-          <button id="Alcohol" type="button" class="btn btn-dark" onClick="dispatchButton('Depression');">Depression Home</button>
+          <button id="Depression" type="button" class="btn btn-dark" onClick="dispatchButton('Depression');">Depression Home</button>
           <button id="Alcohol" type="button" class="btn btn-dark" onClick="dispatchButton('Alcohol');">Alcohol</button>
           <button id="Income" type="button" class="btn btn-dark" onClick="dispatchButton('Income');">Income</button>
+          <button id="Alcohol" type="button" class="btn btn-dark" onClick="dispatchButton('Poverty');">Poverty</button>
           <button id="Obesity" type="button" class="btn btn-dark" onClick="dispatchButton('Obesity');">Obesity</button>
         </div>
       </div>

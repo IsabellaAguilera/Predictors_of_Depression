@@ -13,13 +13,13 @@ function buildDepressionPlot(){
   var url = '/api_Alcohol'
   d3.json(url).then(function(response) {
     var data = response;
-    var layout = {title : "Depression Plot"};
-    var layout2 = {title: "Depression Bar Chart"}
+    //var layout = {title : "Depression Plot"};
+    //var layout2 = {title: "Depression Bar Chart"}
     var depression_rate = data.map(function(record) {
-      return record['Dep_Yes%'];
+      return record['yes_percent'];
     });
     var states = data.map(function(record){
-      return record['STATE NAME']
+      return record['state']
     });
     var trace1 = {
       x: states,
@@ -37,59 +37,59 @@ function buildDepressionPlot(){
     var data1 = [trace1]
     var data2 = [trace2]
 
-    Plotly.plot("plot4", data2, layout);
-    Plotly.plot("plot3", data1, layout2);
+    Plotly.plot("plot4", data2);
+    Plotly.plot("plot3", data1);
   });
 }
 
-function buildFactorPlot(url){
-  // d3.select("#plot1").text("You selected " + full_url);
-  // console.log("PART 1")
-  //var url = "/api_alcohol";
-  var factor_url = url;
+function buildFactorPlot(source){
+
+  var factor_url = base_url + source;
   d3.json(factor_url).then(function(response) {
     var data = response;
-    var layout = {title : "Alcohol Plot"};
-    var layout2 = {title: "Alcohol Bar Chart"}
+
+    //var layout = {title : "Alcohol Plot"};
+    //var layout2 = {title: "Alcohol Bar Chart"};
 
     var depression_rate = data.map(function(record) {
-      return record['Dep_Yes%'];
+      return record['yes_percent'];
     });
-    var alcohol_rate = data.map(function(record){
-      return record['Yes%'];
+    var factor_rate = data.map(function(record){
+      return record['factor'];
     });
 
     var states = data.map(function(record){
-      return record['STATE NAME']
+      return record['state']
     });
 
     var trace1 = {
-      x: alcohol_rate,
+      x: factor_rate,
       y: depression_rate,
-      name: 'alcohol vs. depression',
       mode:'markers',
-      type: 'scatter'
+      type: 'scatter',
+      text: states,
+      hovertemplate: '<i><b>%{text}</b></i>'
     };
 
     var trace2 = {
       x: states,
-      y: alcohol_rate,
-      name: "alcohol by state",
+      y: factor_rate,
+      //name: "alcohol by state",
       type: "bar"
     };
 
     var trace3 = {
       x: states,
       y: depression_rate,
-      name: "depression by state",
+      //name: "depression by state",
       type: "bar"
     };
 
     var data2 = [trace1];
     var data3 = [trace2, trace3];
 
-    Plotly.plot("plot4", data2, layout);
-    Plotly.plot("plot3", data3, layout2);
+    Plotly.plot("plot4", data2);
+    Plotly.plot("plot3", data3);
   });
 }
 
@@ -132,14 +132,16 @@ function buildDepressionMap(){
         weight: 1,
         fillOpacity: 0.8
       },
-
+      onEachFeature: function(feature, layer) {
+        layer.bindPopup("Location: " + feature.properties.name + "<br>" + feature.properties.depression + "%");
+      }
     }).addTo(map);
   });
 
 }
 
 
-function buildFactorMap(url){
+function buildFactorMap(source){
   // Creating map object
   console.log("mapping")
   var map = L.map("map2", {
@@ -155,15 +157,15 @@ function buildFactorMap(url){
     accessToken: API_KEY
   }).addTo(map);
 
-  var geojson_url = url;
+  var geojson_url = base_geojson_url + source;
 
   // Grabbing our GeoJSON data..
   d3.json(geojson_url).then(function(data) {
     // Creating a GeoJSON layer with the retrieved data
     geojson = L.choropleth(data, {
-
       // Define what  property in the features to use
-      valueProperty: "alcohol",
+
+      valueProperty: data.features[0].properties.FACTOR.toUpperCase(),
 
       // Set color scale
       scale: ["#ffffb2", "#b10026"],
@@ -179,23 +181,32 @@ function buildFactorMap(url){
         weight: 1,
         fillOpacity: 0.8
       },
-
+      onEachFeature: function(feature, layer) {
+        if(feature.properties.FACTOR == 'Income'){
+          layer.bindPopup("Location: " + feature.properties.NAME + "<br>" + feature.properties.FACTOR + " $" + feature.properties.INCOME);
+        }
+        else if(feature.properties.FACTOR == 'Alcohol'){
+          layer.bindPopup("Location: " + feature.properties.NAME + "<br>" + feature.properties.ALCOHOL + "%");
+        }
+        else if(feature.properties.FACTOR == 'Poverty'){
+          layer.bindPopup("Location: " + feature.properties.NAME + "<br>" + feature.properties.POVERTY + "%");
+        }
+        else if(feature.properties.FACTOR == 'Obesity'){
+          layer.bindPopup("Location: " + feature.properties.NAME + "<br>" + feature.properties.OBESITY + "%");
+        }
+      }
     }).addTo(map);
 
-    // L.geoJson(data, {
-    //     style: function(feature) {
-    //       return {
-    //         color: "white",
-    //         // Call the chooseColor function to decide which color to color our neighborhood (color based on borough)
-    //         fillColor: "purple",
-    //         fillOpacity: 0.5,
-    //         weight: 1.5
-    //       };
-    //     }
-    //   }).addTo(map);
   });
 
 }
+
+
+
+function buildVideo(){
+  $("div#map2").append('<iframe width="705" height="415" src="https://www.youtube.com/embed/fWFuQR_Wt4M" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>');
+}
+
 
 function  dispatchButton(source) {
     //d3.select("#commentary").text("You selected " + source);
@@ -211,6 +222,7 @@ function  dispatchButton(source) {
     if(source == 'Depression'){
       buildDepressionPlot();
       buildDepressionMap();
+      buildVideo();
       return;
     }
     else{
@@ -220,13 +232,14 @@ function  dispatchButton(source) {
     //console.log(full_url);
     //d3.select("#plot1").text("You selected " + full_url);
     console.log("button")
-    buildFactorPlot(full_url);
+    buildFactorPlot(source);
     buildDepressionMap();
-    buildFactorMap(full_geojson_url);
+    buildFactorMap(source);
   }
 }
 if (first_time){
   console.log("first_time")
   buildDepressionPlot();
   buildDepressionMap();
+  buildVideo();
 }
