@@ -13,30 +13,35 @@ function buildDepressionPlot(){
   var url = '/api_Alcohol'
   d3.json(url).then(function(response) {
     var data = response;
-    //var layout = {title : "Depression Plot"};
-    //var layout2 = {title: "Depression Bar Chart"}
+
     var depression_rate = data.map(function(record) {
       return record['yes_percent'];
     });
     var states = data.map(function(record){
       return record['state']
     });
+    var state_abbrev = ['AL','AK','AZ','AR','CA','CO','CT','DE','FL','GA','HI','ID','IL','IN','IA','KS','KY','LA','ME','MD','MA','MI','MN','MS','MO','MT','NE','NV','NH','NJ','NM','NY','NC','ND','OH','OK','OR','PA','RI','SC','SD','TN','TX','UT','VT','VA','WA','WV','WI','WY'];
+
     var trace1 = {
-      x: states,
+      x: state_abbrev,
       y: depression_rate,
       name: "depression by state",
       type: "bar"
     };
-   
+
     var layout = {
+      showlegend: true,
       title: {
         text:`Depression Rate per State`,
+        y :0.9,
+        x :0.5,
+        xanchor: 'center',
+        yanchor: 'top',
         font: {
           family: 'Courier New, monospace',
-          size: 24
-        },
-        xref: 'paper',
-        x: 0.05
+          size: 18,
+          color: '#7f7f7f'
+        }
       },
       xaxis: {
         title: {
@@ -61,9 +66,7 @@ function buildDepressionPlot(){
     };
 
     var data1 = [trace1]
-    
 
-  
     Plotly.plot("plot3", data1, layout);
   });
 }
@@ -86,25 +89,37 @@ function buildFactorPlot(source){
     var states = data.map(function(record){
       return record['state']
     });
+    var state_abbrev = ['AL','AK','AZ','AR','CA','CO','CT','DE','FL','GA','HI','ID','IL','IN','IA','KS','KY','LA','ME','MD','MA','MI','MN','MS','MO','MT','NE','NV','NH','NJ','NM','NY','NC','ND','OH','OK','OR','PA','RI','SC','SD','TN','TX','UT','VT','VA','WA','WV','WI','WY'];
 
     var layout = {
-      title : { 
+      showlegend: true,
+      title : {
         text: `${title} Plot`,
+        y :0.9,
+        x :0.5,
+        xanchor: 'center',
+        yanchor: 'top',
         font: {
           family: 'Courier New, monospace',
-          size: 24
+          size: 18,
+          color: '#7f7f7f'
         }
       }
-};
+
+    };
     var layout2 = {
+      showlegend: false,
       title: {
         text:`${title} Bar Chart`,
+        y :0.9,
+        x :0.5,
+        xanchor: 'center',
+        yanchor: 'top',
         font: {
           family: 'Courier New, monospace',
-          size: 24
-        },
-        xref: 'paper',
-        x: 0.05
+          size: 18,
+          color: '#7f7f7f'
+        }
       },
       xaxis: {
         title: {
@@ -158,17 +173,16 @@ function buildFactorPlot(source){
         symbol: 'diamond',
         size: 6
       },
-      text: states,
+      text: state_abbrev,
       name: `${title} and Depression`,
       hovertemplate: '<i><b>%{text}</b></i>' + '<br><b>Depression</b>: %{y}%<br>' + `<b>${title}: %{x}</b>`,
       type: 'scatter'
     };
 
     var trace2 = {
-      x: states,
+      x: state_abbrev,
       y: factor_rate,
       name: `${title} by State`,
-      showlegend: false,
       marker:{
         color: '#FF5500'
       },
@@ -176,10 +190,9 @@ function buildFactorPlot(source){
     };
 
     var trace3 = {
-      x: states,
+      x: state_abbrev,
       y: depression_rate,
       name: "Depression by State",
-      showlegend: false,
       yaxis: 'y2',
       offset: .2,
       marker:{
@@ -236,7 +249,7 @@ function buildDepressionMap(){
         fillOpacity: 0.8
       },
       onEachFeature: function(feature, layer) {
-        layer.bindPopup("Location: " + feature.properties.name + "<br>" + feature.properties.depression + "%");
+        layer.bindPopup("Location: " + feature.properties.name + "<br>" + "Depression:" + feature.properties.depression + "%");
       }
     }).addTo(map);
   });
@@ -286,16 +299,16 @@ function buildFactorMap(source){
       },
       onEachFeature: function(feature, layer) {
         if(feature.properties.FACTOR == 'Income'){
-          layer.bindPopup("Location: " + feature.properties.NAME + "<br>" + feature.properties.FACTOR + " $" + feature.properties.INCOME);
+          layer.bindPopup("Location: " + feature.properties.NAME + "<br>" + feature.properties.FACTOR + ": $" + feature.properties.INCOME);
         }
         else if(feature.properties.FACTOR == 'Alcohol'){
-          layer.bindPopup("Location: " + feature.properties.NAME + "<br>" + feature.properties.ALCOHOL + "%");
+          layer.bindPopup("Location: " + feature.properties.NAME + "<br>" + "Alcoholism: " +feature.properties.ALCOHOL + "%");
         }
         else if(feature.properties.FACTOR == 'Poverty'){
-          layer.bindPopup("Location: " + feature.properties.NAME + "<br>" + feature.properties.POVERTY + "%");
+          layer.bindPopup("Location: " + feature.properties.NAME + "<br>" + "Poverty: " +feature.properties.POVERTY + "%");
         }
         else if(feature.properties.FACTOR == 'Obesity'){
-          layer.bindPopup("Location: " + feature.properties.NAME + "<br>" + feature.properties.OBESITY + "%");
+          layer.bindPopup("Location: " + feature.properties.NAME + "<br>" + "Obesity: " +feature.properties.OBESITY + "%");
         }
       }
     }).addTo(map);
@@ -311,7 +324,7 @@ function buildVideo(){
 }
 
 function buildReferences(){
-  $("div#plot4").append('<br><br><br><h2 style="border:4px; border-style:solid; border-color:#A45858;background:#A45858; color: white; text-align:center">Resources</h2></br></br></br>');
+  $("div#plot4").append('<br><h2 style="border:4px; border-style:solid; border-color:#A45858;background:#A45858; color: white; text-align:center">Resources</h2></br></br></br>');
   $("div#plot4").append('<a href="https://journals.sagepub.com/doi/full/10.1111/1471-6402.00090?casa_token=Bl4WlN1FvCgAAAAA%3AFSQFX1HvvsPw4d689VOQ2xJBKw_z70_1uHOL9c8I93HNuymxKeaEzf2q0ll9qnfsCA7hMjOPFgN7" style="color:#A45858;position:relative;top:-60px;font-size:15px">• Poverty, Inequality, and Discrimination as Sources of Depression Among U.S. Women</a>');
   $("div#plot4").append('<br><a href="https://www.sciencedirect.com/science/article/abs/pii/S0165032714007769" style="color:#955151;position:relative;top:-55px;font-size:15px">• Depression Outcome in Alcohol Dependent Patients: An Evaluation of the Role of Independent and Substance-Induced Depression and Other Predictors</a></br>');
   $("div#plot4").append('<a href="https://onlinelibrary.wiley.com/doi/abs/10.1002/hec.1011?casa_token=-EWkBotQSTEAAAAA:cwb-Rol0aoapOMdMSNTX1X1_U1lKULX8btHbZUbXLnAlTwO2tINWKckXHfeN3ouST9isGV34BH7KMw" style="color:#814747;position:relative;top:-45px;font-size:15px">• Socioeconomic Status, Depression Disparities, and Financial Strain: What Lies Behind the Income‐Depression Relationship? </a>');
