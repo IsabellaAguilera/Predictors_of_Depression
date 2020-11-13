@@ -1,25 +1,11 @@
 import pandas as pd
 import sqlalchemy
-from sqlalchemy.ext.automap import automap_base
-from sqlalchemy.orm import Session
 from sqlalchemy import create_engine, func
 from flask import Flask, render_template, redirect, request, flash, jsonify
-from database_creator import databaser
-
-
 
 app = Flask(__name__)
 
-#app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL', '') or "sqlite:///project2.sqlite"
-
 engine = create_engine('sqlite:///depression.db')
-
-# depression_df = pd.read_sql_query("SELECT * FROM depression", con = engine)
-# depression_json = depression_df.to_json(orient = 'records')
-
-# alcohol_df = pd.read_sql_query("SELECT * FROM alcohol", con = engine)
-# alcohol_json = alcohol_df.to_json(orient = 'records')
-#databaser(engine, 'depression_data.csv', 'alcohol_data.csv')
 
 @app.route('/')
 def index():
@@ -57,7 +43,6 @@ def geojson_depression():
 
 @app.route("/api_Alcohol")
 def alcohol_data():
-    #engine = create_engine('sqlite:///project2.sqlite')
     alcohol_df = pd.read_sql_query("SELECT * FROM alcohol", con = engine)
     type_list = []
     for x in range(50):
@@ -67,10 +52,8 @@ def alcohol_data():
     alcohol_json = alcohol_df.to_json(orient = 'records')
     return alcohol_json
 
-
 @app.route("/api_Income")
 def income_data():
-    #engine = create_engine('sqlite:///project2.sqlite')
     income_df = pd.read_sql_query("SELECT * FROM income", con = engine)
     type_list = []
     for x in range(50):
@@ -82,7 +65,6 @@ def income_data():
 
 @app.route("/api_Poverty")
 def poverty_data():
-    #engine = create_engine('sqlite:///project2.sqlite')
     poverty_df = pd.read_sql_query("SELECT * FROM poverty", con = engine)
     type_list = []
     for x in range(50):
@@ -94,7 +76,6 @@ def poverty_data():
 
 @app.route("/api_Obesity")
 def obesity_data():
-    #engine = create_engine('sqlite:///project2.sqlite')
     obesity_df = pd.read_sql_query("SELECT * FROM obesity", con = engine)
     type_list = []
     for x in range(50):
@@ -106,7 +87,6 @@ def obesity_data():
 
 @app.route("/api_Depression")
 def depression_data():
-    #engine = create_engine('sqlite:///project2.sqlite', convert_unicode=True)
     depression_df = pd.read_sql_query("SELECT * FROM depression", con = engine)
     type_list = []
     for x in range(50):
@@ -115,7 +95,6 @@ def depression_data():
     depression_df = depression_df.merge(type_df, left_index=True, right_index=True)
     depression_json = depression_df.to_json(orient = 'records')
     return depression_json
-
 
 if __name__ == '__main__':
     app.run()
