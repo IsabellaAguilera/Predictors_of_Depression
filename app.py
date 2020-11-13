@@ -6,7 +6,7 @@ from flask import Flask, render_template, redirect, request, flash, jsonify
 
 app = Flask(__name__)
 
-engine = create_engine('sqlite:///depression.db')
+engine = create_engine('sqlite:///data/depression.db')
 
 @app.route('/')
 def index():
