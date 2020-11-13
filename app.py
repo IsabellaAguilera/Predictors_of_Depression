@@ -1,3 +1,4 @@
+from pathlib import Path
 import pandas as pd
 import sqlalchemy
 from sqlalchemy import create_engine, func
@@ -13,31 +14,36 @@ def index():
 
 @app.route('/geojson_Alcohol')
 def geojson_alcohol():
-    file = "alcohol_geojson.json"
+    data_folder = Path("geojsons/")
+    file = data_folder / "alcohol_geojson.json"
     contents = open(file,'r').read()
     return contents
 
 @app.route('/geojson_Income')
 def geojson_income():
-    file = "income_geojson.json"
+    data_folder = Path("geojsons/")
+    file = data_folder / "income_geojson.json"
     contents = open(file,'r').read()
     return contents
 
 @app.route('/geojson_Poverty')
 def geojson_poverty():
-    file = "poverty_geojson.json"
+    data_folder = Path("geojsons/")
+    file = data_folder / "poverty_geojson.json"
     contents = open(file,'r').read()
     return contents
 
 @app.route('/geojson_Obesity')
 def geojson_obesity():
-    file = "obesity_geojson.json"
+    data_folder = Path("geojsons/")
+    file = data_folder / "obesity_geojson.json"
     contents = open(file,'r').read()
     return contents
 
 @app.route('/geojson_Depression')
 def geojson_depression():
-    file = "us_states_geojson_depression_final.geojson"
+    data_folder = Path("geojsons/")
+    file = data_folder / "us_states_geojson_depression_final.geojson"
     contents = open(file,'r').read()
     return contents
 
