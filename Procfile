@@ -1,1 +1,1 @@
-web: gunicorn depression.app:app
+web: gunicorn app:app
